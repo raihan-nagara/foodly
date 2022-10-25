@@ -14,6 +14,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int indexCategory = 0;
+  double opacity = 0.0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -333,24 +335,58 @@ class _HomeScreenState extends State<HomeScreen> {
         vertical: 15,
       ),
       width: double.infinity,
-      height: 80,
+      height: 85,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(),
       ),
-      child: const Text.rich(
-        TextSpan(
-          text: "2 Items | " '\$' "45\n",
-          style: TextStyle(
-              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-          children: [
-            TextSpan(
-              text: "Delivery Charges Included",
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
-            ),
-          ],
-        ),
+      child: Row(
+        children: [
+          Column(
+            children: [
+              AnimatedOpacity(
+                duration: const Duration(seconds: 2),
+                opacity: opacity,
+                child: const Text.rich(
+                  TextSpan(
+                    text: "2 Items | " '\$' "45\n",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                    children: [
+                      TextSpan(
+                        text: "Delivery Charges Included",
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 30),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () => setState(() {
+            opacity = 1;
+                }),
+                child: const Text(
+                  "View Cart",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                      fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

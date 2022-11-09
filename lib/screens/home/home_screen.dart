@@ -4,15 +4,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodly/screens/home/detail_page.dart';
 import 'package:foodly/model/food.dart';
 import 'package:foodly/constants.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:foodly/model/items.dart';
+import 'package:foodly/model/price.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   int indexCategory = 0;
   double opacity = 0.0;
 
@@ -284,7 +287,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(100, 0, 0, 0),
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          ref.read(itemsProvider.notifier).state++;
+                          ref.read(priceProvider.notifier).state += 10;
+                        },
                         child: const Text(
                           "Add",
                           style: TextStyle(
@@ -348,9 +354,9 @@ class _HomeScreenState extends State<HomeScreen> {
               AnimatedOpacity(
                 duration: const Duration(seconds: 2),
                 opacity: opacity,
-                child: const Text.rich(
+                child: Text.rich(
                   TextSpan(
-                    text: "2 Items | " '\$' "45\n",
+                    text: '${ref.watch(itemsProvider)} | ' '\$' "${ref.watch(priceProvider)}\n",
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 20,
@@ -373,7 +379,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               TextButton(
                 onPressed: () => setState(() {
-            opacity = 1;
+                  opacity = 1;
                 }),
                 child: const Text(
                   "View Cart",

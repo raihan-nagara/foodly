@@ -3,6 +3,7 @@ class Food {
     required this.id,
     required this.image,
     required this.name,
+    required this.price,    
     required this.merk,
     required this.description,
   });
@@ -10,6 +11,7 @@ class Food {
   String id;
   String image;
   String name;
+  String price;  
   String merk;
   String description;
 
@@ -17,6 +19,7 @@ class Food {
         id: json["id"],
         image: json["image"],
         name: json["name"],
+        price: json["price"],        
         merk: json["merk"],
         description: json["description"],
       );
@@ -25,6 +28,7 @@ class Food {
         "id": id,
         "image": image,
         "name": name,
+        "price": price,        
         "merk": merk,
         "description": description,
       };
@@ -35,6 +39,7 @@ final dummyFoods = [
     id: '1',
     image: 'assets/images/donut1.png',
     name: 'Nuts Caramel',
+    price: '15',    
     merk: 'Dunkin',
     description:
         'The Sweet And Subtle Salty Combo Of Chocolate Meets Caramel. Introduce The Caramel Duo To Your Mouth!',
@@ -43,6 +48,7 @@ final dummyFoods = [
     id: '2',
     image: 'assets/images/donut2.png',
     name: 'Red Velvet',
+    price: '15',    
     merk: 'Dunkin',
     description:
         'The Sweet And Subtle Salty Combo Of Chocolate Meets Caramel. Introduce The Caramel Duo To Your Mouth!',
@@ -51,6 +57,7 @@ final dummyFoods = [
     id: '3',
     image: 'assets/images/donut3.png',
     name: 'Strawberry',
+    price: '15',    
     merk: 'Dunkin',
     description:
         'The Sweet And Subtle Salty Combo Of Chocolate Meets Caramel. Introduce The Caramel Duo To Your Mouth!',
@@ -59,6 +66,7 @@ final dummyFoods = [
     id: '4',
     image: 'assets/images/donut4.png',
     name: 'Choco Tap',
+    price: '15',    
     merk: 'Dunkin',
     description:
         'The Sweet And Subtle Salty Combo Of Chocolate Meets Caramel. Introduce The Caramel Duo To Your Mouth!',

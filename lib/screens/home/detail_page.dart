@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-
 import '/model/food.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:foodly/model/items.dart';
+import 'package:foodly/model/price.dart';
 
-class DetailPage extends StatefulWidget {
+class DetailPage extends ConsumerStatefulWidget {
   const DetailPage({Key? key, required this.food}) : super(key: key);
   final Food food;
 
   @override
-  State<DetailPage> createState() => _DetailPageState();
+  ConsumerState<DetailPage> createState() => _DetailPageState();
 }
 
-class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin{
+class _DetailPageState extends ConsumerState<DetailPage> with TickerProviderStateMixin{
   int quantity = 1;
   late AnimationController controller;
   late Animation<double> animation;
@@ -256,9 +258,9 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin{
               children: [
                 Column(
                   children: [
-                    const Text.rich(
+                    Text.rich(
                       TextSpan(
-                        text: '\$' "12.75\n",
+                        text: '\$'"${ref.watch(priceProvider)}\n",
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 20,
@@ -279,7 +281,10 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin{
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        ref.read(priceProvider.notifier).state+=10;
+                        ref.read(itemsProvider.notifier).state++;                        
+                      },
                       child: const Text(
                         "Add to Cart",
                         style: TextStyle(

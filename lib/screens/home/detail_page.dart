@@ -1,17 +1,38 @@
 import 'package:flutter/material.dart';
-
 import '/model/food.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:foodly/model/items.dart';
+import 'package:foodly/model/price.dart';
 
-class DetailPage extends StatefulWidget {
+class DetailPage extends ConsumerStatefulWidget {
   const DetailPage({Key? key, required this.food}) : super(key: key);
   final Food food;
 
   @override
-  State<DetailPage> createState() => _DetailPageState();
+  ConsumerState<DetailPage> createState() => _DetailPageState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class _DetailPageState extends ConsumerState<DetailPage> with TickerProviderStateMixin{
   int quantity = 1;
+  late AnimationController controller;
+  late Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(vsync: this, duration: Duration(seconds: 3));
+
+    animation = CurvedAnimation(parent: controller, 
+    curve: Curves.linear);
+
+    controller.repeat();
+  }
+
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,16 +96,15 @@ class _DetailPageState extends State<DetailPage> {
                         TextSpan(
                           text: "    2%",
                           style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.normal,
-                              ),
+                            fontSize: 11,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
               ),
-
               Align(
                 child: Container(
                   height: 120,
@@ -115,16 +135,15 @@ class _DetailPageState extends State<DetailPage> {
                         TextSpan(
                           text: "    3%",
                           style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.normal,
-                              ),
+                            fontSize: 11,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
               ),
-
               Align(
                 child: Container(
                   height: 120,
@@ -155,16 +174,15 @@ class _DetailPageState extends State<DetailPage> {
                         TextSpan(
                           text: "   12%",
                           style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.normal,
-                              ),
+                            fontSize: 11,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
               ),
-
               Align(
                 child: Container(
                   height: 120,
@@ -185,7 +203,9 @@ class _DetailPageState extends State<DetailPage> {
                     TextSpan(
                       text: "Energy\n",
                       style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12),
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12),
                       children: [
                         TextSpan(
                           text: "140 Kcal\n\n",
@@ -195,9 +215,9 @@ class _DetailPageState extends State<DetailPage> {
                         TextSpan(
                           text: "   40%",
                           style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.normal,
-                              ),
+                            fontSize: 11,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                       ],
                     ),
@@ -223,33 +243,60 @@ class _DetailPageState extends State<DetailPage> {
           ),
           const SizedBox(height: 30),
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 0),
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 15,
             ),
             width: double.infinity,
-            height: 80,
+            height: 85,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(),
             ),
-            child: const Text.rich(
-              TextSpan(
-                text: '\$' "12.75\n",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-                children: [
-                  TextSpan(
-                    text: "Delivery Not Included",
-                    style:
-                        TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
-                  ),
-                ],
-              ),
+            child: Row(
+              children: [
+                Column(
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        text: '\$'"${ref.watch(priceProvider)}\n",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                        children: [
+                          TextSpan(
+                            text: "Delivery Not Included",
+                            style: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.normal),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 40),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        ref.read(priceProvider.notifier).state+=10;
+                        ref.read(itemsProvider.notifier).state++;                        
+                      },
+                      child: const Text(
+                        "Add to Cart",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                            fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 20),
@@ -280,18 +327,15 @@ class _DetailPageState extends State<DetailPage> {
             ),
           ),
           Center(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(250),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(250),
-                child: Image.asset(
-                  widget.food.image,
-                  fit: BoxFit.cover,
-                  width: 180,
-                  height: 180,
-                ),
+            child: RotationTransition(
+              turns: animation,
+              child: SizedBox(
+                  child: Image.asset(
+                    widget.food.image,
+                    fit: BoxFit.cover,
+                    width: 220,
+                    height: 220,
+                  ),
               ),
             ),
           ),
